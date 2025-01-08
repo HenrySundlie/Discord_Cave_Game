@@ -18,7 +18,7 @@ def orientation(p, q, r):
 	# function returns the following values:
 	# 0 : Collinear points
 	# 1 : Clockwise points
-	# 2 : Counterclockwise
+	# 2 : Counterclockwise hehe
 
 	# See https://www.geeksforgeeks.org/orientation-3-ordered-points/amp/
 	# for details of below formula.
