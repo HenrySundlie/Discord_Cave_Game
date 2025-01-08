@@ -26,6 +26,7 @@ from fractions import Fraction
 from collections import OrderedDict
 import random
 
+#kadsjhfkasdjhf aksdjhfalsjdfhalkjfh aljdsfh 
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
@@ -118,7 +119,7 @@ async def check_character(json_file, author):
             return role.name
     return None
 
-async def battle(attacker, defender):
+#async def battle(attacker, defender):
 
 @bot.command(aliases=['help!'])
 async def bot_description(ctx):
