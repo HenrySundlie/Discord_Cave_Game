@@ -1,4 +1,5 @@
-# A Python3 program to find if 2 given line segments intersect or not
+# This is a program based on some math that checks if two 
+# given line segments intersect or not
 
 class Point:
 	def __init__(self, x, y):
@@ -83,5 +84,3 @@ if doIntersect(p1, q1, p2, q2):
 	print("Yes")
 else:
 	print("No")
-
-# This code is contributed by Ansh Riyal

@@ -25,15 +25,18 @@ import math
 from fractions import Fraction
 from collections import OrderedDict
 import random
+import os
 
-#kadsjhfkasdjhf aksdjhfalsjdfhalkjfh aljdsfh 
+print("is this working you gay man")
+print(os.getcwd())
+
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
 intents.dm_messages = True
 
-#adds an amount to the time. specify minutes, seconds, or hours. json file
-#   stores time in hours
+# Adds an amount to the time file. Specify minutes, seconds, or hours. The json 
+# file stores time in hours.
 def time_elapse(amount, units):
     if units == "seconds":
         amount = amount / 60 / 60
@@ -45,7 +48,7 @@ def time_elapse(amount, units):
     with open('time.json', 'w') as f:
         json.dump(time, f)
 
-#puts the object at the end of the turns list
+# Puts the object at the end of the turns list
 def turns(object):
     with open('turns.json', 'r') as f:
         turns = json.load(f)
@@ -54,7 +57,7 @@ def turns(object):
     with open('turns.json', 'w') as f:
         json.dump(turns, f)
 
-#returns True if character is first in turns list, False otherwise
+# Returns True if character is first in turns list, False otherwise
 def turnCheck(character):
     with open('turns.json', 'r') as f:
         turns = json.load(f)
@@ -63,7 +66,7 @@ def turnCheck(character):
     else:
         return False
 
-
+# Changes the characters coords based on the direction
 async def move_character(direction: str, author):
     character = None
     for role in author.roles:
@@ -107,20 +110,23 @@ async def move_character(direction: str, author):
     else:
         return 'You are not authorized.'
 
+# Returns the name of the square based on it's coords
 def find_matching_square(coord, squares):
     for square_name, square_info in squares.items():
         if square_info["coordinates"] == list(coord):
             return square_name
     return None
 
+# Checks to make sure that the person that does the command is a
+# character in the game
 async def check_character(json_file, author):
     for role in author.roles:
         if role.name in json_file:
             return role.name
     return None
 
-#async def battle(attacker, defender):
-
+# If the user types !help! the bot sends a list of its commands
+# and their descriptions
 @bot.command(aliases=['help!'])
 async def bot_description(ctx):
     commands_and_descriptions = {'move': 'roll your movement dice, and then type in n, e, s, or w to move in that direction.',
@@ -137,6 +143,7 @@ async def bot_description(ctx):
     message += "Miscellaneous info: One square is about 3 by 3 feet, the only command that you have to take turns with (as of now) is the move command. Everything else can be executed at any time."
     await ctx.send(message)
 
+# Descriptions for the details command
 detailed_descriptions = {('move', 'n', 'w', 'e', 's'): 'Rolls your movement dice and adds your movement bonus. You may move that many times. This will not work if:\n1. It\'s not your turn: the bot will ask you if you want to skip your friend\'s turn.\n2. If someone else is currently in the process of moving: two people can\'t move at once.',
                             ('pickup', 'get', 'take'): 'Type !pickup [item], and if the item is in your square, it retrieves item and puts it in your inventory.',
                             ('send_map', 'map'): 'DMs you a picture of your map. You have to have a map to use this command, and only squares that you\'ve been on show up.',
@@ -145,6 +152,8 @@ detailed_descriptions = {('move', 'n', 'w', 'e', 's'): 'Rolls your movement dice
                             ('visible_squares', 'visible'): 'Sends you the visibility of every square in your room'
                             }
 
+# If the user types !details [command] the bot sends more information
+# about that command.
 @bot.command()
 async def details(ctx, arg1: str):
 
@@ -159,11 +168,13 @@ async def details(ctx, arg1: str):
     else:
         await ctx.send("Invalid command. Use !describe followed by the command")
 
-#dict for when a character is moving (used in bot event)
+# Dict for when a character is moving (used in bot event)
 isMovingDict = {}
-#dict for when a character wants to skip a turn (or not) used in a bot event
+# Dict for when a character wants to skip a turn (or not) used in a bot event
 isSkippingTurn = {}
 
+# The bot checks if it's the character's turn, moves them to the end of the
+# turns list, and makes 30 seconds elapse
 @bot.command(aliases=['m', 'go'])
 async def move(ctx):
     with open('players.json', 'r') as f:
@@ -194,7 +205,7 @@ async def move(ctx):
             json.dump(players, f)
         await ctx.send("You (" + character + ") rolled a " + str(roll) + ". Type the letter of the direction you want to move.")
 
-#the bot event for when a character is moving, or when he wants to skip a turn
+# The bot event for when a character is moving, or when he wants to skip a turn
 @bot.event
 async def on_message(message):
     #ignore commands?
@@ -284,6 +295,8 @@ async def on_message(message):
             await channel.send("You rolled a " + str(roll) + ". Type the letter of the direction you want to move.")
             isSkippingTurn = {}
 
+# If an item is in the characters square, it adds the item to the character's
+# inventory
 @bot.command(aliases=['pickup', 'get'])
 async def take_item(ctx, item: str):
     author = ctx.message.author
@@ -324,7 +337,7 @@ async def take_item(ctx, item: str):
     else:
         await ctx.send(f'You are not authorized.')
 
-
+# Removes an item from the characters inventory and adds it to the square
 @bot.command(aliases=['d'])
 async def drop(ctx, item: str):
     with open("players.json", "r") as f:
@@ -358,7 +371,8 @@ async def drop(ctx, item: str):
     else:
         await ctx.send("You don't have a " + str(item))
 
-
+# DMs a picture of the room to the userr. It only includes squares that the
+# user has previously explored.
 @bot.command(aliases=['map'])
 async def send_map(ctx):
     with open('room_1_squares.json', 'r') as f:
@@ -409,6 +423,7 @@ async def send_map(ctx):
     else:
         await ctx.send("Sorry, you don't have a map yet")
 
+# Sends the inventory and stats to the user
 @bot.command(aliases=['stats'])
 async def show_stats(ctx):
     author = ctx.message.author
@@ -430,7 +445,7 @@ async def show_stats(ctx):
     else:
         await ctx.send('Something\'s wrong')
 
-#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv view func stuff
+#vvvvvvvvvvvvvvvvvvvvv This is code that enables the viewing function to work
 class Point:
     def __init__(self, x, y):
         self.x = x
@@ -505,6 +520,8 @@ def doIntersect(p1,q1,p2,q2):
     return False
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+# This returns a list of which squares are fully, partially, or not visible to
+# the user
 def visible_squares(squares, walls, character_location):
     square_visibility_dict = {}
     for square in squares:
@@ -546,6 +563,7 @@ def visible_squares(squares, walls, character_location):
             square_visibility_dict[square] = 0
     return square_visibility_dict
 
+# Sends anything that the user can see to the chat
 @bot.command(aliases=['look', 'see', 'v'])
 async def view(ctx):
     author = ctx.message.author
@@ -600,6 +618,7 @@ async def view(ctx):
         with open('players.json', 'w') as f:
             json.dump(players, f)
 
+# Sends a list of every square's visibility
 @bot.command()
 async def visible(ctx, arg1: str):
     if (ctx.message.content.startswith('!visible') or
@@ -633,6 +652,7 @@ async def visible(ctx, arg1: str):
     else:
         await ctx.send("Command not understood")
 
+# Tells where the character is
 @bot.command(aliases=['l', 'L', 'coordinates'])
 async def location(ctx):
     with open("players.json", "r") as f:
@@ -641,7 +661,7 @@ async def location(ctx):
     character = None
     character = await check_character(players, author)
     location = players[character]["coordinates"]
-    await ctx.send("Your (" + character + "'s) location is " + location)
+    await ctx.send("Your (" + character + "'s) location is " + str(location))
 
 
 

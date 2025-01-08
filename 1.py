@@ -1,4 +1,5 @@
-
+# This is a visibility function that had a major flaw and didn't work,
+# so I had to get rid of it, but I spent too much time on it to want to delete it.
 
 
 
