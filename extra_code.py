@@ -1,4 +1,7 @@
-#opening and closing json files
+# This file includes segments of working code that I might need to use again
+
+
+# opening and closing json files
 
 with open('inventory.json', 'r') as f:
     inventory = json.load(f)
@@ -14,7 +17,7 @@ with open('room_1_squares.json', 'w') as f:
     json.dump(squares, f)
 
 
-#describe square code
+# describe square code
 
 async def describe_square(ctx):
     author = ctx.message.author
@@ -51,7 +54,7 @@ async def describe_square(ctx):
 async def describe(ctx):
     await describe_square(ctx)
 
-#first try for successful view code with line segments
+# first try for successful view code with line segments
 @bot.command(aliases=['look', 'see'])
 async def view(ctx):
     author = ctx.message.author
