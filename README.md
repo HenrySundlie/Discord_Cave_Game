@@ -1,2 +1,2 @@
 # Projects
-Different projects that I've worked on
+These are a bunch of different projects that I've worked on.
