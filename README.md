@@ -1,4 +1,4 @@
-I didn't make any real effort to follow the right formatting when I made this project, so it's extremely bloated and unorganized. Everything works though, I tested it recently to make sure.
+I didn't make any real effort to follow the right formatting when I made this project, so it's extremely bloated and unorganized. Most importantly though, everything works: I tested it recently to make sure.
 
 It's a discord bot that I made a while ago, when I was learning python. It's a game where each user is a character in a cave, that can move around and pick up things. The cave is made of a set of squares where each has a character. The user sends commands to the discord chat to make his character take actions, including:
 
