@@ -26,6 +26,11 @@ from fractions import Fraction
 from collections import OrderedDict
 import random
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
+token = os.getenv("DISCORD_TOKEN")
+
 
 print("is this working you gay man")
 print(os.getcwd())
@@ -680,4 +685,4 @@ class maggot:
         return 'A maggot is grunting'
 """
 
-bot.run('OTk0MDI1MDk5MDAwODI3OTc4.G3xOD6.wlybF_3-ucjqNwlsPOfJN6hMbDGF2j5_wN9vfA')
+bot.run(token)
